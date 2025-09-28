@@ -1,4 +1,4 @@
-plicativo Gerador de Planilhas Excel
+Aplicativo Gerador de Planilhas Excel
 Criei um aplicativo web completo e responsivo que funciona tanto em celular quanto desktop, permitindo gerar planilhas Excel funcionais automaticamente com fórmulas e formatação profissional.
 
 🚀 Principais Funcionalidades
