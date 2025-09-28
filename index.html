@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Planilhas Excel</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">📊</span>
+                    <h1 class="logo-text">Gerador de Planilhas Excel</h1>
+                </div>
+                <button class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <nav class="nav" id="nav">
+                <a href="#home" class="nav-link active" data-section="home">Início</a>
+                <a href="#about" class="nav-link" data-section="about">Sobre</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Seção Inicial -->
+        <section id="home" class="section active">
+            <div class="container">
+                <div class="hero">
+                    <h2>Crie planilhas Excel profissionais com seus dados</h2>
+                    <p>Digite suas informações reais e gere planilhas personalizadas com seus produtos, clientes e dados específicos</p>
+                </div>
+                
+                <div class="planilha-grid">
+                    <div class="planilha-card" data-tipo="estoque">
+                        <div class="card-icon">📦</div>
+                        <h3>Controle de Estoque</h3>
+                        <p>Controle completo dos seus produtos, com códigos, quantidades e alertas reais do seu negócio</p>
+                        <button class="btn btn--primary">Criar Planilha</button>
+                    </div>
+                    
+                    <div class="planilha-card" data-tipo="financeiro">
+                        <div class="card-icon">💰</div>
+                        <h3>Controle Financeiro</h3>
+                        <p>Gestão das suas receitas, despesas e categorias financeiras específicas</p>
+                        <button class="btn btn--primary">Criar Planilha</button>
+                    </div>
+                    
+                    <div class="planilha-card" data-tipo="vendas">
+                        <div class="card-icon">📈</div>
+                        <h3>Vendas e Comissões</h3>
+                        <p>Controle dos seus vendedores, produtos e metas reais de vendas</p>
+                        <button class="btn btn--primary">Criar Planilha</button>
+                    </div>
+                    
+                    <div class="planilha-card" data-tipo="clientes">
+                        <div class="card-icon">👥</div>
+                        <h3>Lista de Clientes</h3>
+                        <p>Cadastro completo dos seus clientes com informações reais de contato</p>
+                        <button class="btn btn--primary">Criar Planilha</button>
+                    </div>
+                    
+                    <div class="planilha-card" data-tipo="projetos">
+                        <div class="card-icon">📋</div>
+                        <h3>Controle de Projetos</h3>
+                        <p>Gestão dos seus projetos, tarefas e responsáveis específicos</p>
+                        <button class="btn btn--primary">Criar Planilha</button>
+                    </div>
+                    
+                    <div class="planilha-card" data-tipo="agenda">
+                        <div class="card-icon">📅</div>
+                        <h3>Agenda/Cronograma</h3>
+                        <p>Organização dos seus compromissos e eventos personalizados</p>
+                        <button class="btn btn--primary">Criar Planilha</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Formulário -->
+        <section id="formulario" class="section">
+            <div class="container">
+                <div class="formulario-header">
+                    <button class="btn btn--outline back-btn" id="backBtn">← Voltar</button>
+                    <h2 id="formularioTitulo"></h2>
+                </div>
+                
+                <div class="formulario-content">
+                    <form id="planilhaForm" class="planilha-form">
+                        <!-- Campo oculto para tipo atual -->
+                        <input type="hidden" id="tipoAtual" name="tipo">
+                        
+                        <!-- Campos básicos -->
+                        <div class="form-group">
+                            <label class="form-label">Nome da Empresa/Projeto *</label>
+                            <input type="text" class="form-control" name="empresa" required>
+                        </div>
+                        
+                        <!-- Campos específicos serão inseridos dinamicamente -->
+                        <div id="camposEspecificos"></div>
+                        
+                        <!-- Campos personalizados -->
+                        <div class="form-group">
+                            <label class="form-label">Campos Personalizados (opcional)</label>
+                            <div id="camposPersonalizados">
+                                <div class="campo-personalizado">
+                                    <input type="text" class="form-control" placeholder="Nome do campo personalizado">
+                                    <button type="button" class="btn btn--outline btn--sm remove-campo">×</button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn--secondary btn--sm" id="addCampo">+ Adicionar Campo</button>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn btn--secondary" id="previewBtn">Visualizar Preview</button>
+                            <button type="submit" class="btn btn--primary">Gerar Planilha Excel</button>
+                        </div>
+                    </form>
+                    
+                    <!-- Alerta de validação -->
+                    <div class="alert alert--error hidden" id="validationAlert">
+                        <p>Por favor, preencha todos os campos obrigatórios marcados com (*)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Preview -->
+        <section id="preview" class="section">
+            <div class="container">
+                <div class="preview-header">
+                    <button class="btn btn--outline back-btn" id="backToFormBtn">← Voltar ao Formulário</button>
+                    <h2>Preview - Seus Dados Reais</h2>
+                </div>
+                
+                <div class="preview-info">
+                    <div class="status status--success">
+                        <span>✓</span> Dados capturados com sucesso!
+                    </div>
+                    <p>Verifique se os dados abaixo estão corretos. Esta é uma prévia da planilha que será gerada com suas informações reais.</p>
+                </div>
+                
+                <div class="preview-content">
+                    <div class="preview-table-container">
+                        <table class="preview-table" id="previewTable">
+                            <!-- Tabela será gerada dinamicamente -->
+                        </table>
+                    </div>
+                    
+                    <div class="preview-actions">
+                        <button type="button" class="btn btn--secondary" id="customizeBtn">Personalizar</button>
+                        <button type="button" class="btn btn--primary" id="generateBtn">Gerar e Baixar Excel</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal de Personalização -->
+        <div class="modal hidden" id="customModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Personalizar Planilha</h3>
+                    <button class="modal-close" id="modalClose">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Cor do Cabeçalho</label>
+                        <select class="form-control" id="headerColor">
+                            <option value="#2196F3">Azul</option>
+                            <option value="#4CAF50">Verde</option>
+                            <option value="#FF9800">Laranja</option>
+                            <option value="#9C27B0">Roxo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Estilo da Tabela</label>
+                        <select class="form-control" id="tableStyle">
+                            <option value="default">Padrão</option>
+                            <option value="striped">Listrado</option>
+                            <option value="bordered">Com Bordas</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn--secondary" id="cancelCustom">Cancelar</button>
+                    <button class="btn btn--primary" id="applyCustom">Aplicar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading hidden" id="loading">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <p>Gerando sua planilha Excel com seus dados...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Seção Sobre -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2>Sobre o Gerador de Planilhas</h2>
+            <div class="about-content">
+                <div class="about-card">
+                    <h3>📊 Dados Reais</h3>
+                    <p>Seus dados digitados aparecem exatamente como você preencheu - nenhum dado de exemplo é usado na planilha final.</p>
+                </div>
+                <div class="about-card">
+                    <h3>🔧 Totalmente Funcional</h3>
+                    <p>As planilhas geradas vêm com fórmulas reais do Excel, prontas para usar com seus dados específicos.</p>
+                </div>
+                <div class="about-card">
+                    <h3>⚡ Personalizado</h3>
+                    <p>Adicione quantos produtos, clientes ou itens precisar - a planilha se adapta ao seu negócio.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Gerador de Planilhas Excel. Seus dados, suas planilhas!</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
